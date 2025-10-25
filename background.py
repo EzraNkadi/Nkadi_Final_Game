@@ -14,15 +14,6 @@ misc.set_colorkey((0,0,0,))
 
 
 def get_tile(sheet, x, y):
-    '''slices a single tile from the sheet
-        Args: 
-            sheet(pygame.Surface): The sprite sheet image
-            x(int): the column index of the tile
-            y(int): the row index of the tile
-            
-            Returns:
-            pygame.Surface: a new surface containing the extracted tile
-            '''
 #creat new blank Surface for the tile
     tile = pygame.Surface((TILE_SIZE, TILE_SIZE))
 #copy the tile from the sprite sheet to the new surface
