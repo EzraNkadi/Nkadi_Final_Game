@@ -1,4 +1,4 @@
-##########!!!!!!! MAKE INTO CLASS 
+##########!!!!!!! MAKE INTO CLASS FOR EFFICIENCY
 
 import pygame
 ### Screen Properties
