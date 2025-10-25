@@ -1,3 +1,5 @@
+##########!!!!!!! MAKE INTO CLASS 
+
 import pygame
 ### Screen Properties
 TILE_SIZE = 32

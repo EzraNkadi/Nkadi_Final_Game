@@ -15,6 +15,7 @@ clock = pygame.time.Clock()
 running = True
 
 # background building blocks
+######!!!!!! MAKE A CLASS TO MAKE THIS EASIER
 basic_floor = floors[1]
 wall_bottom = floors[55]
 wall_top = floors[19]
@@ -39,6 +40,7 @@ while running:
             running = False
 
     # fill the screen with a color to wipe away anything from last frame
+    #####!!!!!! MAKE THIS EASIER 
     screen.fill("purple")
     for x in range (0, WIDTH, TILE_SIZE):
         for y in range(0,HEIGHT, TILE_SIZE):
