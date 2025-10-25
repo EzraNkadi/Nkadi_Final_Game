@@ -54,5 +54,4 @@ rows3 = sheet_width3 // TILE_SIZE
 for y in range (rows3):
     for x in range (cols3):
         decorations.append(get_tile(misc,x,y))
-print(decorations)
 
