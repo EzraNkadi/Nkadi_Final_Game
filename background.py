@@ -1,17 +1,17 @@
 ##########!!!!!!! MAKE INTO CLASS FOR EFFICIENCY
-
 import pygame
-### Screen Properties
-TILE_SIZE = 32
-sprite_sheet_size = (TILE_SIZE * 32, TILE_SIZE*16)
-dungeon_floors_walls = pygame.image.load('Tiles-SandstoneDungeons.png')
-dungeon_walls = pygame.image.load('Tiles-Door-packs.png')
+from dimensions_utils import *
 WIDTH = 800
 HEIGHT = 608
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-misc = pygame.image.load('Tiles-Props-pack.png').convert_alpha()
-misc.set_colorkey((0,0,0,))
+### Screen Properties
+background = pygame.Surface((WIDTH, HEIGHT))
 
+
+ #make background frome tiles pulled from sprite sheet
+TILE_SIZE = 32
+#define separate sprite sheets
+dungeon_floors_walls = pygame.image.load('building blocks/Tiles-SandstoneDungeons.png')
+dungeon_walls = pygame.image.load('building blocks/Tiles-Door-packs.png')
 
 def get_tile(sheet, x, y):
 #creat new blank Surface for the tile
@@ -38,13 +38,40 @@ for y in range (rows2):
     for x in range (cols2):
         doors.append(get_tile(dungeon_walls,x,y))
 
+basic_floor = floors[1]
+wall_bottom = floors[55]
+wall_top = floors[19]
+wall_left = floors[18]
+wall_right = floors[20]
+right_corner = floors[27]
+left_corner = floors[29]
+blank = floors[62]
+torches = pygame.image.load('building blocks/items/torch_4.png')
+def make_background():
+    #place basic floor tiles 
+    for x in range (0, WIDTH, TILE_SIZE):
+        for y in range(0,HEIGHT, TILE_SIZE):
+            background.blit(basic_floor, (x,y))
+    #place wall at bottom of the screen
+    for x in range(0, WIDTH, TILE_SIZE):
+        background.blit(wall_bottom,(x,HEIGHT-58))
+    #place wall at top of the screen
+    for x in range(0, WIDTH, TILE_SIZE):
+        background.blit(wall_top, (x,0))
+    #layer right wall on top of bottom and top walls
+    for y in range(0, HEIGHT, TILE_SIZE):
+        background.blit(wall_right,(x,y))
+    #layer left wall on top of bottom and top walls
+    for y in range(0, HEIGHT, TILE_SIZE):
+        background.blit(wall_left, (0,y))
+    #place blank black boxes at bottom of screen 
+    for x in range(0,WIDTH, TILE_SIZE):
+        for y in range(HEIGHT-54, HEIGHT, TILE_SIZE):
+            background.blit(blank,(x,y))
+    # place torches at equal increment inside of enclosure
+    for x in range(64, WIDTH - 64, 32):
+        for y in range (64, HEIGHT - 64, 32 ):
+            background.blit(torches,(x, y))
 
-decorations = []
-sheet_width3 = misc.get_width()
-sheet_height3 = misc.get_height()
-cols3 = sheet_width3 // TILE_SIZE
-rows3 = sheet_width3 // TILE_SIZE
-for y in range (rows3):
-    for x in range (cols3):
-        decorations.append(get_tile(misc,x,y))
-
+    return background
+   
