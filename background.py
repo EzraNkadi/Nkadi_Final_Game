@@ -1,8 +1,6 @@
 ##########!!!!!!! MAKE INTO CLASS FOR EFFICIENCY
 import pygame
-from dimensions_utils import *
-WIDTH = 800
-HEIGHT = 608
+from util_params import *
 ### Screen Properties
 background = pygame.Surface((WIDTH, HEIGHT))
 
