@@ -1,7 +1,8 @@
-from dimensions_utils import *
+from util_params import *
 import pygame
 from background import *
 from random import randint
+from player import *
 # pygame setup
 pygame.init()
 
@@ -10,11 +11,9 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Dungeon Crawler')
 clock = pygame.time.Clock()
 running = True
-
 #call background
 background = make_background()
-
-########################## TESTING ZONE ###############################
+# TESTING ZONE ###############################
 
 
 
@@ -26,10 +25,12 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("purple")
     screen.blit(background,(0,0))
+   
+
+
     
 
     # RENDER YOUR GAME HERE
