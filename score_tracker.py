@@ -22,6 +22,7 @@ class ScoreTracker:
         '''writes the score onto a surface'''
         text = f"score: {self.score}"
         self.text_surface = self.font.render(text, True, self.color)
+        
     #method to draw the score onto the screen 
     def draw(self, background):
         background.blit(self.text_surface, (self.x, self.y))        
