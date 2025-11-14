@@ -19,8 +19,9 @@ background = make_background()
 #set a base frame for reference when going through the list 
 current_frame = 0
 current_run_frame = 0
+current_attack_frame = 0
 #create a variable for animation speed so that it can be changed 
-animation_speed = 0.025
+animation_speed = 0.03
 #variable to track the ammount of time that has been passed 
 time_elapsed = 0
 if IDLE_FRAMES:
@@ -28,6 +29,10 @@ if IDLE_FRAMES:
     player_pos_y = (HEIGHT//2 - IDLE_FRAMES[0].get_height())
 ###################
 if RUN_FRAMES:
+    player_pos_x= (WIDTH//2 - RUN_FRAMES[0].get_width())
+    player_pos_y = (HEIGHT//2 - RUN_FRAMES[0].get_height())
+
+if ATTACK_FRAMES:
     player_pos_x= (WIDTH//2 - RUN_FRAMES[0].get_width())
     player_pos_y = (HEIGHT//2 - RUN_FRAMES[0].get_height())
 player_speed = 5
@@ -56,10 +61,19 @@ while running:
     time_elapsed += dt
     #only if you are moving will the running animation go through
     if keys[pygame.K_LEFT] or keys[pygame.K_RIGHT] or keys[pygame.K_UP] or keys[pygame.K_DOWN]:
-        current_run_frame = (current_run_frame+1)% len(RUN_FRAMES)
+        animation_speed = 0.025
+        if time_elapsed >= animation_speed:
+            current_run_frame = (current_run_frame+1)% len(RUN_FRAMES)
+            time_elapsed = 0
         if RUN_FRAMES:
             current_run_image = RUN_FRAMES[current_run_frame]
             background.blit(current_run_image,(player_pos_x, player_pos_y))
+            if keys[pygame.K_SPACE]: 
+                animation_speed = 1.0 
+                current_attack_frame = (current_attack_frame+1)% len(ATTACK_FRAMES)
+                if ATTACK_FRAMES:
+                    current_attack_image = ATTACK_FRAMES[current_attack_frame]
+                    background.blit(current_attack_image,(player_pos_x, player_pos_y) )   
     #go through the indices of the list creating the animation 
     elif not keys[pygame.K_LEFT] or keys[pygame.K_RIGHT] or keys[pygame.K_UP] or keys[pygame.K_DOWN]:
         if time_elapsed >= animation_speed:
@@ -69,7 +83,12 @@ while running:
         if IDLE_FRAMES:
             current_image = IDLE_FRAMES[current_frame]
             background.blit(current_image, (player_pos_x, player_pos_y))
-        
+            if keys[pygame.K_SPACE]: 
+                animation_speed = 1.0 
+                current_attack_frame = (current_attack_frame+1)% len(ATTACK_FRAMES)
+                if ATTACK_FRAMES:
+                    current_attack_image = ATTACK_FRAMES[current_attack_frame]
+                    background.blit(current_attack_image,(player_pos_x, player_pos_y) )
     ###################### moving animation ############################3
     
 

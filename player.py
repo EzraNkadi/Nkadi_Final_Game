@@ -1,48 +1,65 @@
 import pygame
 from util_params import *
 from background import *
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-#initialize idle sprite sheet
-pygame.init()
-#set the ammount of frames that are in the animation 
-keys = pygame.key.get_pressed()
-#set the size of the character
+from assets import *
+####### CONSTANTS ######
 TARGET_FRAME_WIDTH = 64
 TARGET_FRAME_HEIGHT = 64
-#create animation for running 
-NUM_FRAMES_RUN = 6
-RUN_FRAMES = []
-#same process as for idle animation, add seperate variable for ammount of frames and a seperate list for png's
-for i in range(NUM_FRAMES_RUN):
-    run_file = f'building blocks/warrior_movements/0{i}_Warrior_Run.png'
-
-    try:
-        frame_image_run = pygame.image.load(run_file).convert_alpha()
-        run_scaled = pygame.transform.scale(frame_image_run, (TARGET_FRAME_WIDTH, TARGET_FRAME_HEIGHT) )
-
-
-        RUN_FRAMES.append(run_scaled)
-    except pygame.error as e:
-        print(f"something in the code is not working")
-
-NUM_FRAMES = 8
+PLAYER_SPEED = 5
+####### ANIMATION SPEEDS ######
+ANIMATION_SPEED_IDLE = 0.15 
+ANIMATION_SPEED_RUN = 0.10
+ANIMATION_SPEED_ATTACK = 0.05
+######## ANIMATION LISTS ######
 IDLE_FRAMES = []
-for i in range(NUM_FRAMES):
-    # loop through range of ammount of frames to get each individual png
-    file_path = f'building blocks/warrior_movements/0{i}_Warrior_Idle.png'
+RUN_FRAMES = []
+ATTACK_FRAMES = []
+class Player:
+    def __init__(self, idle_frames, run_frames, attack_frames):
+        # position and speed
+        self.speed = PLAYER_SPEED
+        #check that frames were loaded 
+        if idle_frames:
+            initial_frame = idle_frames[0]
+            self.pos_x = (WIDTH//2 - initial_frame.get_width() //2)
+            self.pos_y = (WIDTH//2 - initial_frame.get_height() //2)
+        else:
+            self.pos_x = WIDTH//2
+            self.pos_y = HEIGHT//2
+        # initialize the animation lists imported fron assets 
+        self.idle_frames = IDLE_FRAMES
+        self.run_frames = RUN_FRAMES
+        self.attack_frames = ATTACK_FRAMES
 
-    try:
-        #load the image and make its background transparent
-        frame_image = pygame.image.load(file_path).convert_alpha()
-        scaled_frame = pygame.transform.scale(frame_image, (TARGET_FRAME_WIDTH, TARGET_FRAME_HEIGHT) )
-        #append the individual pngs to the list to be looped through later
-        IDLE_FRAMES.append(scaled_frame)
-    except pygame.error as e:
-        print(f"failed to load image")
-        print(f"pygame error")
+        # determine which state the player is in 
+        self.cirrent_frame_index = 0
+        self.time_elapsed = 0
+        self.current_animation_speed = ANIMATION_SPEED_IDLE
+        self.state = 'idle'
 
-        break
+    #update the player
+    def update(self, dt, keys):
+        '''updates the position of thep player, the animation state, and therefore the animatino of the player'''
+
+        #check for motion
+
+        moved = False
+        if keys[pygame.K_LEFT]:
+            self.pos_x -= self.speed
+            moved = True
+        if keys[pygame.K_RIGHT]:
+            self.pos_x += self.speed
+            moved = True
+        if keys[pygame.K_UP]:
+            self.pos_y += self.speed
+            moved = True
+        if keys[pygame.K_DOWN]:
+            self.pos_y -= self.speed
+            moved = True
+
+        #determine the sate of the plater
+        if keys[pygame.K_SPACE] and self.attack_frames:
 
 
-    
+
 
