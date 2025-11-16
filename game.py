@@ -4,6 +4,7 @@ from background import *
 from random import randint
 from player import *
 from score_tracker import *
+from assets import *
 # pygame setup
 pygame.init()
 
@@ -12,102 +13,34 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Dungeon Crawler')
 clock = pygame.time.Clock()
 running = True
-#call background
+
+
+####### INITIALIZATIONS ################################
 background = make_background()
-
-####ANIMATION####
-#set a base frame for reference when going through the list 
-current_frame = 0
-current_run_frame = 0
-current_attack_frame = 0
-#create a variable for animation speed so that it can be changed 
-animation_speed = 0.03
-#variable to track the ammount of time that has been passed 
-time_elapsed = 0
-if IDLE_FRAMES:
-    player_pos_x= (WIDTH//2 - IDLE_FRAMES[0].get_width())
-    player_pos_y = (HEIGHT//2 - IDLE_FRAMES[0].get_height())
-###################
-if RUN_FRAMES:
-    player_pos_x= (WIDTH//2 - RUN_FRAMES[0].get_width())
-    player_pos_y = (HEIGHT//2 - RUN_FRAMES[0].get_height())
-
-if ATTACK_FRAMES:
-    player_pos_x= (WIDTH//2 - RUN_FRAMES[0].get_width())
-    player_pos_y = (HEIGHT//2 - RUN_FRAMES[0].get_height())
-player_speed = 5
-
-
-# TESTING ZONE ###############################
-
+player = Player(IDLE_FRAMES, RUN_FRAMES, ATTACK_FRAMES)
 score_tracker = ScoreTracker(50,10)
+########################################################
 
-########################################################################
 
 while running:
-    # poll for events
     #create a clock/timer to track the ammount of time that has passed
     dt = clock.tick(60)/1000
     # pygame.QUIT event means the user clicked X to close your window
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-    #initialize background in loop so that the character 
-    # has something taht blits over it so there is no after image
+    #intialize keys for movement
+    keys = pygame.key.get_pressed()
+    #update the player 
+    player.update(dt,keys)
+    # create the background 
     background = make_background()
     #draw the score tracker 
     score_tracker.draw(background)
-    #add the time that has passed to tracker
-    time_elapsed += dt
-    #only if you are moving will the running animation go through
-    if keys[pygame.K_LEFT] or keys[pygame.K_RIGHT] or keys[pygame.K_UP] or keys[pygame.K_DOWN]:
-        animation_speed = 0.025
-        if time_elapsed >= animation_speed:
-            current_run_frame = (current_run_frame+1)% len(RUN_FRAMES)
-            time_elapsed = 0
-        if RUN_FRAMES:
-            current_run_image = RUN_FRAMES[current_run_frame]
-            background.blit(current_run_image,(player_pos_x, player_pos_y))
-            if keys[pygame.K_SPACE]: 
-                animation_speed = 1.0 
-                current_attack_frame = (current_attack_frame+1)% len(ATTACK_FRAMES)
-                if ATTACK_FRAMES:
-                    current_attack_image = ATTACK_FRAMES[current_attack_frame]
-                    background.blit(current_attack_image,(player_pos_x, player_pos_y) )   
-    #go through the indices of the list creating the animation 
-    elif not keys[pygame.K_LEFT] or keys[pygame.K_RIGHT] or keys[pygame.K_UP] or keys[pygame.K_DOWN]:
-        if time_elapsed >= animation_speed:
-            current_frame = (current_frame +1) % len(IDLE_FRAMES)
-            time_elapsed = 0
-    #blit the image onto the background
-        if IDLE_FRAMES:
-            current_image = IDLE_FRAMES[current_frame]
-            background.blit(current_image, (player_pos_x, player_pos_y))
-            if keys[pygame.K_SPACE]: 
-                animation_speed = 1.0 
-                current_attack_frame = (current_attack_frame+1)% len(ATTACK_FRAMES)
-                if ATTACK_FRAMES:
-                    current_attack_image = ATTACK_FRAMES[current_attack_frame]
-                    background.blit(current_attack_image,(player_pos_x, player_pos_y) )
+    #draw the player on top of all other surfaces 
+    player.draw(background)
     ###################### moving animation ############################3
-    
-
-
-
-    
     screen.blit(background,(0,0))
-    keys = pygame.key.get_pressed()
-    #create movement
-    if keys[pygame.K_LEFT]:
-        player_pos_x -= player_speed
-    if keys[pygame.K_RIGHT]:
-        player_pos_x += player_speed
-    if keys[pygame.K_UP]:
-        player_pos_y -= player_speed
-    if keys[pygame.K_DOWN]:
-        player_pos_y += player_speed
-
-    # RENDER YOUR GAME HERE
     
     # flip() the display to put your work on screen
     pygame.display.flip()
