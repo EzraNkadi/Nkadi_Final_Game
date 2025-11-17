@@ -2,6 +2,7 @@ import pygame
 from util_params import *
 from background import *
 from assets import *
+from math import *
 ####### CONSTANTS ######
 TARGET_FRAME_WIDTH = 64
 TARGET_FRAME_HEIGHT = 64
@@ -18,7 +19,8 @@ ATTACK_FRAMES = []
 class Player:
     def __init__(self, IDLE_FRAMES, RUN_FRAMES, ATTACK_FRAMES):
 # position and speed changes at set speed
-        self.speed = PLAYER_SPEED
+        self.speed_x = PLAYER_SPEED
+        self.speed_y = PLAYER_SPEED
 #check that frames were loaded 
         if IDLE_FRAMES:
             #if IDLE_FRAMES is true meaning the images were loaded then create position of player
@@ -30,6 +32,9 @@ class Player:
         self.run_frames = RUN_FRAMES
         self.attack_frames = ATTACK_FRAMES
 
+        #create a theta for player turning 
+        self.theta = 0
+
         # determine which state the player is in setting default as idle 
         self.current_frame_index = 0
         self.time_elapsed = 0.0
@@ -39,22 +44,25 @@ class Player:
 #update the player
     def update(self, dt, keys):
         '''updates the position of thep player, the animation state, and therefore the animatino of the player'''
-
+        
     #check for motion
         moved = False
         if keys[pygame.K_LEFT]:
-            self.pos_x -= self.speed
+            self.pos_x -= self.speed_x
         moved = True
         if keys[pygame.K_RIGHT]:
-            self.pos_x += self.speed
+            self.pos_x += self.speed_x
         moved = True
         if keys[pygame.K_UP]:
-            self.pos_y -= self.speed
+            self.pos_y -= self.speed_y
         moved = True
         if keys[pygame.K_DOWN]:
-            self.pos_y += self.speed
+            self.pos_y += self.speed_y
         moved = True
-
+    #update angle
+        self.theta = atan2(-self.speed_y, self.speed_x)
+        self.theta = self.theta * 180 / pi
+        print(self.theta)
 #determine the sate of the plater
         if keys[pygame.K_SPACE]: 
             #reset the frame if not in attack state
@@ -114,6 +122,7 @@ class Player:
         # if there are values in the frame list draw the player
         if frames:
             current_image = frames[self.current_frame_index]
+            current_image = pygame.transform.rotozoom(current_image,0.0 ,1)
             background.blit(current_image, (self.pos_x, self.pos_y))
 
 
