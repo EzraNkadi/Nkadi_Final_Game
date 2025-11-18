@@ -9,4 +9,7 @@ Class Project
  - once you are in the game press escape to exit the game 
 
  ## images 
- ![alt text]
+ ![screenshot](Nkadi_pygame_screenshot.png)
+ ![screenshot](Nkadi_pyganme_picture.png)
+ ![screenshot](Nkadi_Pygame_Screenshot1.png)
+ ![screenshot](Nkadi_pygame_Final.png)

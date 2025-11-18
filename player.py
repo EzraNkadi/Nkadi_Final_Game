@@ -7,9 +7,10 @@ from math import *
 TARGET_FRAME_WIDTH = 64
 TARGET_FRAME_HEIGHT = 64
 PLAYER_SPEED = 5
+PLAYER_WATER_SPEED = 2.5
 ####### ANIMATION SPEEDS ######
-ANIMATION_SPEED_IDLE = 0.15 
-ANIMATION_SPEED_RUN = 0.15
+ANIMATION_SPEED_IDLE = 0.1
+ANIMATION_SPEED_RUN = 0.1
 ANIMATION_SPEED_ATTACK = 0.05
 ######## ANIMATION LISTS ######
 IDLE_FRAMES = []
@@ -44,25 +45,36 @@ class Player:
 #update the player
     def update(self, dt, keys):
         '''updates the position of thep player, the animation state, and therefore the animatino of the player'''
+        #create position at the center of character
+
+        # self.center_x = int(self.pos_x + TARGET_FRAME_WIDTH /2)
+        # self.center_y = int(self.pos_y + TARGET_FRAME_HEIGHT /2)
+        # #to slow down character check if is in water
+        # #check the pixel color of what is behind the player to determine if in water
+        # self.pixel_color = background.get_at((self.center_x, self.center_y))
+        # #check the R G B value, since the water is blue that is third index of tuple
+        # self.is_in_water = self.pixel_color[2]>200 and self.pixel_color[1] >100
+        # print(self.pixel_color)
+        # if self.is_in_water:
+        #     self.speed=2.5
+        # else:
+        #     self.speed = 5.0
         
+    # need to find the change in distance for rotation    
     #check for motion
         moved = False
         if keys[pygame.K_LEFT]:
-            self.pos_x -= self.speed_x
+            self.pos_x -= PLAYER_SPEED
         moved = True
         if keys[pygame.K_RIGHT]:
-            self.pos_x += self.speed_x
+            self.pos_x += PLAYER_SPEED
         moved = True
         if keys[pygame.K_UP]:
-            self.pos_y -= self.speed_y
+            self.pos_y -= PLAYER_SPEED
         moved = True
         if keys[pygame.K_DOWN]:
-            self.pos_y += self.speed_y
+            self.pos_y += PLAYER_SPEED
         moved = True
-    #update angle
-        self.theta = atan2(-self.speed_y, self.speed_x)
-        self.theta = self.theta * 180 / pi
-        print(self.theta)
 #determine the sate of the plater
         if keys[pygame.K_SPACE]: 
             #reset the frame if not in attack state
@@ -86,6 +98,8 @@ class Player:
         if self.time_elapsed >= self.current_animation_speed:
             #if is true the time elapsed gets reset to reset the timer and continue the animation
             self.time_elapsed = 0
+        
+        
 
 #select the frame list 
             frames = []
