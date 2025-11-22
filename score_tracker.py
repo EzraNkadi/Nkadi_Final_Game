@@ -13,9 +13,9 @@ class ScoreTracker:
 
 
         #create a way to update score
-        #score will end up being updated after killing enemies
-    def increase_score(self, ammount):
-        self.score += ammount
+        #score will end up being updated after time passes
+    def increase_score(self, dt):
+        self.score += int(dt)
         self.update_surface()
 
     def update_surface(self):

@@ -28,6 +28,9 @@ class Player:
             initial_frame = IDLE_FRAMES[0]
             self.pos_x = (WIDTH//2 - initial_frame.get_width() //2)
             self.pos_y = (WIDTH//2 - initial_frame.get_height() //2)
+
+            w = 32
+            h = 32
             # initialize the animation lists imported fron assets 
         self.idle_frames = IDLE_FRAMES
         self.run_frames = RUN_FRAMES
@@ -41,9 +44,11 @@ class Player:
         self.time_elapsed = 0.0
         self.current_animation_speed = ANIMATION_SPEED_IDLE
         self.state = 'idle'
-
+        
+        self.rect = pygame.Rect(0, 0, w , h )
+        self.rect.center = (self.pos_x + 2//2, self.pos_y + h//2)
 #update the player
-    def update(self, dt, keys):
+    def update(self, dt, keys, background):
         '''updates the position of thep player, the animation state, and therefore the animatino of the player'''
         #create position at the center of character
 
@@ -56,25 +61,33 @@ class Player:
         # self.is_in_water = self.pixel_color[2]>200 and self.pixel_color[1] >100
         # print(self.pixel_color)
         # if self.is_in_water:
-        #     self.speed=2.5
+        #     self.speed = 2.5
         # else:
         #     self.speed = 5.0
         
     # need to find the change in distance for rotation    
     #check for motion
+        current_speed = PLAYER_SPEED
+
+
         moved = False
         if keys[pygame.K_LEFT]:
-            self.pos_x -= PLAYER_SPEED
+            self.pos_x  -= current_speed
         moved = True
         if keys[pygame.K_RIGHT]:
-            self.pos_x += PLAYER_SPEED
+            self.pos_x += current_speed
         moved = True
         if keys[pygame.K_UP]:
-            self.pos_y -= PLAYER_SPEED
+            self.pos_y -= current_speed
         moved = True
         if keys[pygame.K_DOWN]:
-            self.pos_y += PLAYER_SPEED
+            self.pos_y += current_speed
         moved = True
+        w = 64
+        h = 64
+        #draw the rectangle at the center of the player
+        #move the rectangle where the playe is moving
+        self.rect.center = (self.pos_x + w//2 , self.pos_y + h//2)
 #determine the sate of the plater
         if keys[pygame.K_SPACE]: 
             #reset the frame if not in attack state
@@ -136,6 +149,8 @@ class Player:
         # if there are values in the frame list draw the player
         if frames:
             current_image = frames[self.current_frame_index]
+            #draw the rectangle to make sure it is in the correct position will remove later
+            pygame.draw.rect(background, (255,255,0), self.rect, 1)
             current_image = pygame.transform.rotozoom(current_image,0.0 ,1)
             background.blit(current_image, (self.pos_x, self.pos_y))
 

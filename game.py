@@ -52,11 +52,12 @@ while running:
     elif game_state == OVER:
         draw_text("GAME OVER")
         #update the player 
-    player.update(dt,keys)
+    player.update(dt,keys,background)
     # create the background 
     background = make_background()
     #draw the score tracker 
     score_tracker.draw(background)
+    score_tracker.increase_score(dt)
     #draw the player on top of all other surfaces 
     player.draw(background)
        
