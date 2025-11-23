@@ -6,7 +6,7 @@ from math import *
 ####### CONSTANTS ######
 TARGET_FRAME_WIDTH = 64
 TARGET_FRAME_HEIGHT = 64
-PLAYER_SPEED = 5
+PLAYER_SPEED = 4
 PLAYER_WATER_SPEED = 2.5
 ####### ANIMATION SPEEDS ######
 ANIMATION_SPEED_IDLE = 0.1
@@ -28,7 +28,7 @@ class Player:
             initial_frame = IDLE_FRAMES[0]
             self.pos_x = (WIDTH//2 - initial_frame.get_width() //2)
             self.pos_y = (WIDTH//2 - initial_frame.get_height() //2)
-
+            #
             w = 32
             h = 32
             # initialize the animation lists imported fron assets 
@@ -36,17 +36,17 @@ class Player:
         self.run_frames = RUN_FRAMES
         self.attack_frames = ATTACK_FRAMES
 
-        #create a theta for player turning 
-        self.theta = 0
-
         # determine which state the player is in setting default as idle 
         self.current_frame_index = 0
         self.time_elapsed = 0.0
         self.current_animation_speed = ANIMATION_SPEED_IDLE
         self.state = 'idle'
-        
+        #create rect for player for contact detection
         self.rect = pygame.Rect(0, 0, w , h )
         self.rect.center = (self.pos_x + 2//2, self.pos_y + h//2)
+
+        #initialize position of character
+        self.facing_right = True
 #update the player
     def update(self, dt, keys, background):
         '''updates the position of thep player, the animation state, and therefore the animatino of the player'''
@@ -68,21 +68,32 @@ class Player:
     # need to find the change in distance for rotation    
     #check for motion
         current_speed = PLAYER_SPEED
-
-
+        move_x = 0
+        move_y = 0
         moved = False
         if keys[pygame.K_LEFT]:
-            self.pos_x  -= current_speed
+            move_x  -= current_speed
         moved = True
         if keys[pygame.K_RIGHT]:
-            self.pos_x += current_speed
+            move_x += current_speed
         moved = True
         if keys[pygame.K_UP]:
-            self.pos_y -= current_speed
+            move_y -= current_speed
         moved = True
         if keys[pygame.K_DOWN]:
-            self.pos_y += current_speed
+            move_y += current_speed
         moved = True
+        #flipping logic
+        if move_x < 0:
+            #moving left
+            self.facing_right = False
+        elif move_x > 0:
+            #moving right
+            self.facing_right = True
+        #update position
+        self.pos_x += move_x
+        self.pos_y += move_y
+
         w = 64
         h = 64
         #draw the rectangle at the center of the player
@@ -148,10 +159,14 @@ class Player:
             frames = self.idle_frames
         # if there are values in the frame list draw the player
         if frames:
+
             current_image = frames[self.current_frame_index]
+            #logic for facing movement
+            if  self.facing_right == False:
+                #if facing left rotate the image
+                current_image = pygame.transform.flip(current_image, 1, 0)
             #draw the rectangle to make sure it is in the correct position will remove later
             pygame.draw.rect(background, (255,255,0), self.rect, 1)
-            current_image = pygame.transform.rotozoom(current_image,0.0 ,1)
             background.blit(current_image, (self.pos_x, self.pos_y))
 
 

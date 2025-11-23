@@ -15,7 +15,7 @@ class ScoreTracker:
         #create a way to update score
         #score will end up being updated after time passes
     def increase_score(self, dt):
-        self.score += int(dt)
+        self.score += dt * 10
         self.update_surface()
 
     def update_surface(self):
