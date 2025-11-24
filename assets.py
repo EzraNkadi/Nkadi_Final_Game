@@ -61,5 +61,17 @@ for i in range(NUM_ATTACK_FRAMES):
         print(f"pygame error")
 
         break
+NUM_ARCHER_FRAMES = 8
+ARCHER_FRAMES = []
+for i in range(NUM_ARCHER_FRAMES):
+    archer_frames = f'building blocks/archer_movements/0{i}_Archer_Shoot.png'
+    try:
+        frame_archer = pygame.image.load(archer_frames).convert_alpha()
+        scaled_archer_frame = pygame.transform.scale(frame_archer, (TARGET_FRAME_WIDTH, TARGET_FRAME_HEIGHT))
+
+        ARCHER_FRAMES.append(scaled_archer_frame)
+    except pygame.error as e:
+        print('failed to load image')
+        print('pygame error')
 
     

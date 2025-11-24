@@ -20,8 +20,7 @@ ATTACK_FRAMES = []
 class Player:
     def __init__(self, IDLE_FRAMES, RUN_FRAMES, ATTACK_FRAMES):
 # position and speed changes at set speed
-        self.speed_x = PLAYER_SPEED
-        self.speed_y = PLAYER_SPEED
+        self.current_speed = PLAYER_SPEED
 #check that frames were loaded 
         if IDLE_FRAMES:
             #if IDLE_FRAMES is true meaning the images were loaded then create position of player
@@ -50,38 +49,32 @@ class Player:
 #update the player
     def update(self, dt, keys, background):
         '''updates the position of thep player, the animation state, and therefore the animatino of the player'''
-        #create position at the center of character
+        
+        self.pixel_color = background.get_at((self.rect.bottomright))
+        #check the R G B value, since the water is blue that is third index of tuple
 
-        # self.center_x = int(self.pos_x + TARGET_FRAME_WIDTH /2)
-        # self.center_y = int(self.pos_y + TARGET_FRAME_HEIGHT /2)
-        # #to slow down character check if is in water
-        # #check the pixel color of what is behind the player to determine if in water
-        # self.pixel_color = background.get_at((self.center_x, self.center_y))
-        # #check the R G B value, since the water is blue that is third index of tuple
-        # self.is_in_water = self.pixel_color[2]>200 and self.pixel_color[1] >100
-        # print(self.pixel_color)
-        # if self.is_in_water:
-        #     self.speed = 2.5
-        # else:
-        #     self.speed = 5.0
+        if self.pixel_color[0] < 100:
+            self.current_speed = 1.5
+            print(self.pixel_color)
+        else:
+            self.current_speed = 5.0
         
     # need to find the change in distance for rotation    
     #check for motion
-        current_speed = PLAYER_SPEED
         move_x = 0
         move_y = 0
         moved = False
         if keys[pygame.K_LEFT]:
-            move_x  -= current_speed
+            move_x  -= self.current_speed
         moved = True
         if keys[pygame.K_RIGHT]:
-            move_x += current_speed
+            move_x += self.current_speed
         moved = True
         if keys[pygame.K_UP]:
-            move_y -= current_speed
+            move_y -= self.current_speed
         moved = True
         if keys[pygame.K_DOWN]:
-            move_y += current_speed
+            move_y += self.current_speed
         moved = True
         #flipping logic
         if move_x < 0:
@@ -93,6 +86,15 @@ class Player:
         #update position
         self.pos_x += move_x
         self.pos_y += move_y
+        #bind the movement of the character by its rectangle, so that the color detection works
+        if self.rect.left< 0 :
+            self.pos_x = 0
+        if self.rect.right > WIDTH:
+            self.pos_x = WIDTH
+        if self.rect.top < 0:
+            self.pos_y = 0
+        if self.pos_y +32 > HEIGHT:
+            self.pos_y = 580
 
         w = 64
         h = 64
