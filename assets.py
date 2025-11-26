@@ -43,6 +43,7 @@ for i in range(NUM_FRAMES):
         print(f"pygame error")
 
         break
+print(IDLE_FRAMES)
  #### now do to the same thing but for attack animation
 NUM_ATTACK_FRAMES = 4
 ATTACK_FRAMES = []
@@ -61,6 +62,7 @@ for i in range(NUM_ATTACK_FRAMES):
         print(f"pygame error")
 
         break
+
 NUM_ARCHER_FRAMES = 8
 ARCHER_FRAMES = []
 for i in range(NUM_ARCHER_FRAMES):

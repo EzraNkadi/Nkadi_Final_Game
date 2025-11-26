@@ -13,10 +13,7 @@ ANIMATION_SPEED_IDLE = 0.1
 ANIMATION_SPEED_RUN = 0.1
 ANIMATION_SPEED_ATTACK = 0.05
 ######## ANIMATION LISTS ######
-IDLE_FRAMES = []
-RUN_FRAMES = []
-ATTACK_FRAMES = []
-
+#deleted all initialized lists as it was creating problem where it was saying that the lists were empty
 class Player:
     def __init__(self, IDLE_FRAMES, RUN_FRAMES, ATTACK_FRAMES):
 # position and speed changes at set speed
@@ -27,9 +24,12 @@ class Player:
             initial_frame = IDLE_FRAMES[0]
             self.pos_x = (WIDTH//2 - initial_frame.get_width() //2)
             self.pos_y = (WIDTH//2 - initial_frame.get_height() //2)
-            #
-            w = 32
-            h = 32
+            #used for rectangle sizing 
+            w= 32
+            h= 32
+        else:
+            self.pos_x = WIDTH//2
+            self.pos_y = HEIGHT//2
             # initialize the animation lists imported fron assets 
         self.idle_frames = IDLE_FRAMES
         self.run_frames = RUN_FRAMES
@@ -42,7 +42,7 @@ class Player:
         self.state = 'idle'
         #create rect for player for contact detection
         self.rect = pygame.Rect(0, 0, w , h )
-        self.rect.center = (self.pos_x + 2//2, self.pos_y + h//2)
+        self.rect.center = (self.pos_x + w, self.pos_y + h)
 
         #initialize position of character
         self.facing_right = True
@@ -95,7 +95,6 @@ class Player:
             self.pos_y = 0
         if self.pos_y +32 > HEIGHT:
             self.pos_y = 580
-
         w = 64
         h = 64
         #draw the rectangle at the center of the player
@@ -124,9 +123,6 @@ class Player:
         if self.time_elapsed >= self.current_animation_speed:
             #if is true the time elapsed gets reset to reset the timer and continue the animation
             self.time_elapsed = 0
-        
-        
-
 #select the frame list 
             frames = []
             #changes the frames to RUN_FRAMES list

@@ -6,6 +6,7 @@ from player import *
 from score_tracker import *
 from assets import *
 from start_screen import *
+from archer import*
 # pygame setup
 pygame.init()
 
@@ -18,8 +19,9 @@ running = True
 
 ####### INITIALIZATIONS ################################
 background = make_background()
-player = Player(IDLE_FRAMES, RUN_FRAMES, ATTACK_FRAMES)
+player = Player(IDLE_FRAMES,RUN_FRAMES, ATTACK_FRAMES)
 score_tracker = ScoreTracker(50,10)
+archer_manager = ArcherManager()
 ########################################################
 while running:
     #create a clock/timer to track the ammount of time that has passed
@@ -53,14 +55,21 @@ while running:
         draw_text("GAME OVER")
         #update the player 
     player.update(dt,keys,background)
-    # create the background 
-    background = make_background()
-    #draw the score tracker 
-    score_tracker.draw(background)
+    #update the score of the tracker
     score_tracker.increase_score(dt)
+    #passes through the players rect so archers know where the archer is 
+    archer_manager.update(dt, player.rect)
+    #background
+    background = make_background()
+       
+    #draw the score tracker
+    score_tracker.draw(background)
+    #draw the archesr
+    archer_manager.draw(background)
     #draw the player on top of all other surfaces 
     player.draw(background)
-       
+
+    
     
     # flip() the display to put your work on screen
     pygame.display.flip()
