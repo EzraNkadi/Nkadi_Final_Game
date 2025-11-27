@@ -4,7 +4,7 @@ from util_params import *
 from assets import *
 from arrow import *
 from player import*
-
+from arrow import *
 #constants 
 ANIMATION_SPEED = 0.15
 class Archer(pygame.sprite.Sprite):
@@ -17,30 +17,57 @@ class Archer(pygame.sprite.Sprite):
         #create the archer in the middle of the screen for now will randomly generate later
         self.pos = pos
         #create random rate of fire 
-        self.fire = randint(1,5)
+        self.fire_rate = randint(1,5)
+        self.time_since_shot = randint(0, self.fire_rate)
         #set qualities of animation same as use dwith player
         self.attack_animation_length = 8
         self.animation_speed =  ANIMATION_SPEED
         self.frame_index = 0
         self.time_elapsed = 0.0
-    def update(self, dt, player_rect):
-        self.time_elapsed += dt
-        #animation loop
-        if self.time_elapsed >= self.animation_speed:
-            self.time_elapsed = 0
+        #set the attacking as false when archer is first spawned
+        self.attacking = False
+    #function to make it so that arrows shoot 
+    def shoot_arrow(self, target_pos, arrow_group):
+            new_arrow = Arrow(self.rect.center, target_pos)
+            arrow_group.add(new_arrow)
+    #add the arrow group to the update method to control the arrows 
+    def update(self, dt, player_rect, arrow_group):
+        #if the archer is not in the not animating
+        if self.attacking == False:
+            #adds time to the shot timer 
+            self.time_since_shot += dt
+            #if the time that has passed reached the shot cooldown then start the animation for the archer 
+            if self.time_since_shot >= self.fire_rate:
+                self.attacking = True
+                #reset the time since shot 
+                self.time_since_shot = 0
+                self.frame_index = 0
+        #make it so that anmation loop only runs if the archer is attacking
+        if self.attacking == True:
+            #timer for the animation 
+            self.time_elapsed += dt
+            #if enough time has passed go to the next frame 
+            if self.time_elapsed >= self.animation_speed:
+                self.time_elapsed = 0
+                self.frame_index += 1
+                #check to see if the animation is complete
+                if self.frame_index >= self.attack_animation_length:
+                    #at the end of each animation cycle an arrow gets shot
+                    self.shoot_arrow(player_rect.center, arrow_group)
+                    #animation state/attack state gets reset 
+                    self.attacking = False
+                    self.frame_index = 0
+                    self.image = self.frames[0]
+                else:
+                    #where the new image is actually updated 
+                    self.image = self.frames[self.frame_index]
+        else:
+            self.image = self.frames[0]
 
-            self.frame_index = (self.frame_index +1) % len(self.frames)
-            self.image = self.frames[self.frame_index]
+
         #flipping update after each frame has been loaded
         self.visual_update(player_rect.center)
-
-        #make it so that the archers do not all shoot at the same time
-        #self.time_since_shot = randint(0, self.fire)
-    # def update_archer(self, dt, player_rect):
-    #     """in update attack and animation will be controlled"""
-    #     self.visual_update(player_rect.center)
-
-
+        
     def visual_update(self, player_center):
         '''control the archer '''
         #if the x position of the rect of the archer is less than that of the player then it will face right 
@@ -58,6 +85,7 @@ class ArcherManager:
     def __init__(self, spawn_count = 7):
         #pygame sprite group for archer
         self.archers = pygame.sprite.Group()
+        self.arrows = pygame.sprite.Group()
         #spawns as many archers as in spawn count
         for s in range(spawn_count):
             self.spawn_archer()
@@ -72,11 +100,13 @@ class ArcherManager:
         self.archers.add(new_archer)
     def update(self, dt, player_rect):
         #update all of the archers
-        self.archers.update(dt, player_rect)
+        self.archers.update(dt, player_rect, self.arrows)
+        self.arrows.update(dt)
 
     def draw(self, background):
         #draw all archers
         self.archers.draw(background)
+        self.arrows.draw(background)
 
 
 

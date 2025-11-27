@@ -7,6 +7,7 @@ from score_tracker import *
 from assets import *
 from start_screen import *
 from archer import*
+from arrow import*
 # pygame setup
 pygame.init()
 
