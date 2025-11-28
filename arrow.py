@@ -14,15 +14,18 @@ class Arrow(pygame.sprite.Sprite):
         distance = sqrt(dx**2+dy**2)
         
         #if the arrow gets to target position it gets killed
-        if distance == 0:
+        if distance == 32:
             self.kill()
             return
         #x and y velocity
-        self.vel_x = ARROW_SPEED
-        self.vel_y = ARROW_SPEED
+        self.vel_x = (dx/distance)* ARROW_SPEED
+        self.vel_y = (dy/distance)* ARROW_SPEED
         #load the arrow image 
         self.image = pygame.image.load('building blocks/archer_movements/Arrow.png')
-        self.rect = self.image.get_rect()
+        theta = atan2(-dy, dx)
+        degrees = theta *(180/pi)
+        self.image = pygame.transform.rotozoom(self.image, degrees, 0.5 )
+        self.rect = self.image.get_rect(center=start_pos)
         #update the arrow 
     def update(self, dt):
         self.rect.x += self.vel_x
