@@ -5,6 +5,7 @@ from assets import *
 from arrow import *
 from player import*
 from arrow import *
+
 #constants 
 ANIMATION_SPEED = 0.15
 class Archer(pygame.sprite.Sprite):
@@ -98,10 +99,25 @@ class ArcherManager:
         new_archer = Archer((pos_x, pos_y))
         #add the new archer to the group
         self.archers.add(new_archer)
-    def update(self, dt, player_rect):
+    def update(self, dt, player_rect, player_state, game_state_controller):
         #update all of the archers
         self.archers.update(dt, player_rect, self.arrows)
         self.arrows.update(dt)
+        #check for arrow collission with player
+        arrow_hit_player = False
+        #repeats for the ammount of arrows currently present
+        for arrow in self.arrows:
+            #if the player collides with the arrow rect
+            if player_rect.colliderect(arrow.rect):
+                arrow_hit_player = True
+                arrow.kill() 
+                break
+        #once the variable turns true after making contact with player rect this will run 
+        if arrow_hit_player == True:
+            #will bring the game to the gameover screen
+            game_state_controller[0] = OVER
+            return
+            
 
     def draw(self, background):
         #draw all archers
