@@ -27,6 +27,8 @@ score_tracker = ScoreTracker( 50,10)
 archer_manager = ArcherManager()
 ########################################################
 while running:
+
+    
     #create a clock/timer to track the ammount of time that has passed
     dt = clock.tick(60)/1000
     game_state = game_state_controller[0]
@@ -55,27 +57,25 @@ while running:
     elif game_state == MENU:
         draw_text("CLICK TO START")
     elif game_state == GAME:
+        player.update(dt,keys,background)
+    #update the score of the tracker
+        score_tracker.increase_score(dt)
+    #passes through the players rect so archers know where the archer is 
+        archer_manager.update(dt, player.rect , player.state, game_state_controller)
+    #background
+        background = make_background() 
+    #draw the score tracker
+        score_tracker.draw(background)
+    #draw the archesr
+        archer_manager.draw(background)
+    #draw the player on top of all other surfaces 
+        player.draw(background)
+
         screen.blit(background,(0,0))
     elif game_state == OVER:
-        draw_text("GAME OVER")
-        #update the player 
-    player.update(dt,keys,background)
-    #update the score of the tracker
-    score_tracker.increase_score(dt)
-    #passes through the players rect so archers know where the archer is 
-    archer_manager.update(dt, player.rect , player.state, game_state_controller)
-    #background
-    background = make_background()
-       
-    #draw the score tracker
-    score_tracker.draw(background)
-    #draw the archesr
-    archer_manager.draw(background)
-    #draw the player on top of all other surfaces 
-    player.draw(background)
-
-    
-    
+        score_tracker.save_score()
+        draw_text("GAME OVER\n CLICK TO RESTART")
+        # score_tracker.show_scores(screen, WIDTH//2 - 50, 400 )
     # flip() the display to put your work on screen
     pygame.display.flip()
 
