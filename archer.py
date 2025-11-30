@@ -5,7 +5,9 @@ from assets import *
 from arrow import *
 from player import*
 from arrow import *
-
+#sound 
+pygame.mixer.init()
+sound_hit = pygame.mixer.Sound('building blocks/impactBell_heavy_000.ogg')
 #constants 
 ANIMATION_SPEED = 0.15
 class Archer(pygame.sprite.Sprite):
@@ -110,6 +112,7 @@ class ArcherManager:
             #if the player collides with the arrow rect
             if player_rect.colliderect(arrow.rect):
                 arrow_hit_player = True
+                sound_hit.play()
                 arrow.kill() 
                 break
         #once the variable turns true after making contact with player rect this will run 
