@@ -9,8 +9,8 @@ TARGET_FRAME_HEIGHT = 64
 PLAYER_SPEED = 4
 PLAYER_WATER_SPEED = 2.5
 ####### ANIMATION SPEEDS ######
-ANIMATION_SPEED_IDLE = 0.1
-ANIMATION_SPEED_RUN = 0.1
+ANIMATION_SPEED_IDLE = 0.15
+ANIMATION_SPEED_RUN = 0.15
 ANIMATION_SPEED_ATTACK = 0.05
 ######## ANIMATION LISTS ######
 #deleted all initialized lists as it was creating problem where it was saying that the lists were empty
@@ -25,8 +25,8 @@ class Player:
             self.pos_x = (WIDTH//2 - initial_frame.get_width() //2)
             self.pos_y = (WIDTH//2 - initial_frame.get_height() //2)
             #used for rectangle sizing 
-            w= 32
-            h= 32
+            w= 24
+            h= 24
         else:
             self.pos_x = WIDTH//2
             self.pos_y = HEIGHT//2
@@ -49,10 +49,11 @@ class Player:
 #update the player
     def update(self, dt, keys, background):
         '''updates the position of thep player, the animation state, and therefore the animatino of the player'''
+        w = 64
+        h = 64
         
-        self.pixel_color = background.get_at((self.rect.bottomright))
+        self.pixel_color = background.get_at(self.rect.bottomright)
         #check the R G B value, since the water is blue that is third index of tuple
-
         if self.pixel_color[0] < 100:
             self.current_speed = 1.5
             print(self.pixel_color)
@@ -66,16 +67,16 @@ class Player:
         moved = False
         if keys[pygame.K_LEFT]:
             move_x  -= self.current_speed
-        moved = True
+            moved = True
         if keys[pygame.K_RIGHT]:
             move_x += self.current_speed
-        moved = True
+            moved = True
         if keys[pygame.K_UP]:
             move_y -= self.current_speed
-        moved = True
+            moved = True
         if keys[pygame.K_DOWN]:
             move_y += self.current_speed
-        moved = True
+            moved = True
         #flipping logic
         if move_x < 0:
             #moving left
@@ -86,34 +87,34 @@ class Player:
         #update position
         self.pos_x += move_x
         self.pos_y += move_y
-        #bind the movement of the character by its rectangle, so that the color detection works
-        if self.rect.left< 0 :
-            self.pos_x = 0
-        if self.rect.right > WIDTH:
-            self.pos_x = WIDTH
-        if self.rect.top < 0:
-            self.pos_y = 0
-        if self.pos_y +32 > HEIGHT:
-            self.pos_y = 580
-        w = 64
-        h = 64
-        #draw the rectangle at the center of the player
-        #move the rectangle where the playe is moving
+
+        if self.pos_x < 0:
+            self.pos_x = 1
+        if self.pos_x + 64 > WIDTH :
+            self.pos_x = WIDTH - 64
+        if self.pos_y < 0:
+            self.pos_y = 1
+        if self.pos_y + 64 > HEIGHT:
+            self.pos_y = HEIGHT - 64
+
         self.rect.center = (self.pos_x + w//2 , self.pos_y + h//2)
 #determine the sate of the plater
         if keys[pygame.K_SPACE]: 
             #reset the frame if not in attack state
             if self.state != 'attack':
                 self.current_frame_index = 0
+                pass
             #if space is being pressed 
             self.state = 'attack'
             self.current_animation_speed = ANIMATION_SPEED_ATTACK
         #if space is not being pressed but are moving
         elif moved:
+            if self.state != 'run':
+                self.current_frame_index = 0
             self.state = 'run'
             self.current_animation_speed = ANIMATION_SPEED_RUN
         #if you are not moving and space not being pressed 
-        elif self.idle_frames:
+        else:
             self.state = 'idle'
             self.current_animation_speed = ANIMATION_SPEED_IDLE
 

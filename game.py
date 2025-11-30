@@ -76,7 +76,7 @@ while running:
         #if gets hit by arrow save the score 
         if score_tracker.score_saved == False:
             score_tracker.save_score()
-        #reset all of the classes for the restart of the game 
+        #reset all of the classes for the restart of the game
         player = Player(IDLE_FRAMES, RUN_FRAMES, ATTACK_FRAMES)
         archer_manager = ArcherManager()
         score_tracker = ScoreTracker(50,10)
