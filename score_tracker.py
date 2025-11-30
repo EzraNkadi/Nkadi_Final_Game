@@ -36,7 +36,7 @@ class ScoreTracker:
 
     #increases the score as a function of time           
     def increase_score(self, dt):
-        self.score += dt 
+        self.score += dt * 7 
         self.update_surface()
     #puts messages onto screen 
     def update_surface(self):

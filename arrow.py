@@ -10,7 +10,7 @@ class Arrow(pygame.sprite.Sprite):
         dx = target_pos[0] - start_pos[0]
         dy = target_pos[1] - start_pos[1]
         distance = sqrt(dx**2+dy**2)
-        self.ARROW_SPEED = 7
+        self.ARROW_SPEED = 9
         #if the arrow gets to target position it gets killed
         if distance == 32:
             self.kill()

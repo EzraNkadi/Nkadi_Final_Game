@@ -13,7 +13,7 @@ pygame.init()
 
 ### Screen Properties
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption('Dungeon Crawler')
+pygame.display.set_caption('Dodge The Arrows')
 clock = pygame.time.Clock()
 running = True
 
@@ -80,10 +80,8 @@ while running:
         player = Player(IDLE_FRAMES, RUN_FRAMES, ATTACK_FRAMES)
         archer_manager = ArcherManager()
         score_tracker = ScoreTracker(50,10)
-
-        
         draw_text("GAME OVER CLICK TO RESTART")
-        score_tracker.show_scores(screen, WIDTH//2 - 50, 400)
+        score_tracker.show_scores(screen, WIDTH//2 - 100, 400)
     # flip() the display to put your work on screen
     pygame.display.flip()
 

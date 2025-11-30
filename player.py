@@ -9,8 +9,8 @@ TARGET_FRAME_HEIGHT = 64
 PLAYER_SPEED = 4
 PLAYER_WATER_SPEED = 2.5
 ####### ANIMATION SPEEDS ######
-ANIMATION_SPEED_IDLE = 0.15
-ANIMATION_SPEED_RUN = 0.15
+ANIMATION_SPEED_IDLE = 0.05
+ANIMATION_SPEED_RUN = 0.05
 ANIMATION_SPEED_ATTACK = 0.05
 ######## ANIMATION LISTS ######
 #deleted all initialized lists as it was creating problem where it was saying that the lists were empty
@@ -56,7 +56,6 @@ class Player:
         #check the R G B value, since the water is blue that is third index of tuple
         if self.pixel_color[0] < 100:
             self.current_speed = 1.5
-            print(self.pixel_color)
         else:
             self.current_speed = 5.0
         
@@ -87,7 +86,7 @@ class Player:
         #update position
         self.pos_x += move_x
         self.pos_y += move_y
-
+        #creates the bounds in which the player can move 
         if self.pos_x < 0:
             self.pos_x = 1
         if self.pos_x + 64 > WIDTH :
@@ -164,8 +163,6 @@ class Player:
             if  self.facing_right == False:
                 #if facing left rotate the image
                 current_image = pygame.transform.flip(current_image, 1, 0)
-            #draw the rectangle to make sure it is in the correct position will remove later
-            pygame.draw.rect(background, (255,255,0), self.rect, 1)
             background.blit(current_image, (self.pos_x, self.pos_y))
 
 
