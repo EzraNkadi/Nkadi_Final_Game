@@ -73,9 +73,17 @@ while running:
 
         screen.blit(background,(0,0))
     elif game_state == OVER:
-        score_tracker.save_score()
-        draw_text("GAME OVER\n CLICK TO RESTART")
-        # score_tracker.show_scores(screen, WIDTH//2 - 50, 400 )
+        #if gets hit by arrow save the score 
+        if score_tracker.score_saved == False:
+            score_tracker.save_score()
+        #reset all of the classes for the restart of the game 
+        player = Player(IDLE_FRAMES, RUN_FRAMES, ATTACK_FRAMES)
+        archer_manager = ArcherManager()
+        score_tracker = ScoreTracker(50,10)
+
+        
+        draw_text("GAME OVER CLICK TO RESTART")
+        score_tracker.show_scores(screen, WIDTH//2 - 50, 400)
     # flip() the display to put your work on screen
     pygame.display.flip()
 
