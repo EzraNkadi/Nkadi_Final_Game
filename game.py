@@ -23,8 +23,8 @@ game_state = INTRO
 game_state_controller = [game_state]   
 background = make_background()
 player = Player(IDLE_FRAMES,RUN_FRAMES, ATTACK_FRAMES)
-score_tracker = ScoreTracker( 50,10)
-archer_manager = ArcherManager()
+score_tracker = ScoreTracker(50,10)
+archer_manager = ArcherManager(12)
 ########################################################
 while running:
 
