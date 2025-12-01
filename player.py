@@ -57,9 +57,7 @@ class Player:
         if self.pixel_color[0] < 100:
             self.current_speed = 1.5
         else:
-            self.current_speed = 5.0
-        
-    # need to find the change in distance for rotation    
+            self.current_speed = 5.0  
     #check for motion
         move_x = 0
         move_y = 0
@@ -97,7 +95,7 @@ class Player:
             self.pos_y = HEIGHT - 64
 
         self.rect.center = (self.pos_x + w//2 , self.pos_y + h//2)
-#determine the sate of the plater
+            #determine the sate of the plater
         if keys[pygame.K_SPACE]: 
             #reset the frame if not in attack state
             if self.state != 'attack':
@@ -123,7 +121,7 @@ class Player:
         if self.time_elapsed >= self.current_animation_speed:
             #if is true the time elapsed gets reset to reset the timer and continue the animation
             self.time_elapsed = 0
-#select the frame list 
+            #select the frame list 
             frames = []
             #changes the frames to RUN_FRAMES list
             if self.state == 'run':
